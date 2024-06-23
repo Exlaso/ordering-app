@@ -12,12 +12,14 @@ export class OrdersService {
   ) {
   }
 
-  async createOrder(request: CreateOrderRequest) {
+  async createOrder(request: CreateOrderRequest, Authentication: string) {
     const session = await this.ordersRepository.startTransaction();
     try {
       const order = await this.ordersRepository.create(request, { session });
-      await lastValueFrom(this.billingClient.emit('order_created', request));
-      console.log('Order created event sent to billing service');
+      await lastValueFrom(this.billingClient.emit('order_created', {
+        request,
+        Authentication
+      }));
       await session.commitTransaction();
       return order;
     } catch (error) {

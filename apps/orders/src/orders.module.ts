@@ -3,7 +3,7 @@ import { OrdersController } from "./orders.controller";
 import { OrdersService } from "./orders.service";
 import { ConfigModule } from "@nestjs/config";
 import * as joi from 'joi';
-import { DatabaseModule, RmqModule } from '@app/common';
+import { AuthModule, DatabaseModule, RmqModule } from '@app/common';
 import { MongooseModule } from "@nestjs/mongoose";
 import { Order, OrderSchema } from "./schema/order.schema";
 import { OrdersRepository } from './orders.repository';
@@ -18,6 +18,7 @@ import { BILLING_SERVICE } from './constants/services';
         PORT: joi.number().required(),
         RABBIT_MQ_URI: joi.string().required(),
         RABBIT_MQ_BILLING_QUEUE: joi.string().required(),
+        RABBIT_MQ_AUTH_QUEUE: joi.string().required(),
       }),
       envFilePath: "./apps/orders/.env",
     }),
@@ -26,7 +27,8 @@ import { BILLING_SERVICE } from './constants/services';
       name: Order.name,
       schema: OrderSchema
     }]),
-    RmqModule.register({ name: BILLING_SERVICE })
+    RmqModule.register({ name: BILLING_SERVICE }),
+    AuthModule
   ],
   controllers: [OrdersController],
   providers: [OrdersService,OrdersRepository]

@@ -15,4 +15,4 @@ async function bootstrap() {
   await app.listen(PORT);
   return  `Auth is Running on ${PORT} ` as const
 }
-bootstrap().then(console.log);
+bootstrap().then(console.info);

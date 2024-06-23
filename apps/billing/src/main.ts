@@ -9,4 +9,4 @@ async function bootstrap() {
   await app.startAllMicroservices();
   return 'Billing service is running!'
 }
-bootstrap().then(console.log);
+bootstrap().then(console.info);
